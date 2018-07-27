@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Router,
     Route,
-    Switch
+    Switch,
+    Redirect
 } from 'react-router-dom';
 
 import Index from '../containers/home'
@@ -26,9 +27,17 @@ class App extends React.Component {
                     <Route exact path="/" component={Index}/>
                     <Route exact path="/blockList" component={BlockList}/>
                     <Route exact path="/detail/:id" component={Detail}/>
+                    <Redirect to="/" />
                 </Switch>
             </Router>
         );
     }
 }
 export default App;
+
+
+const Footer = () => {
+    return (
+        <footer className='footer'>Footer</footer>
+    )
+}

@@ -11,11 +11,11 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-// import FirstPageIcon from '@material-ui/icons/FirstPage';
-// import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-// import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-// import LastPageIcon from '@material-ui/icons/LastPage';
-
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import moment from 'moment'
 const actionsStyles = theme => ({
   root: {
     flexShrink: 0,
@@ -49,9 +49,9 @@ class TablePaginationActions extends React.Component {
 
     return (
       <div className={classes.root}>
-        {/* <IconButton
+        <IconButton
           onClick={this.handleFirstPageButtonClick}
-          disabled={page === 0}
+          disabled={page === 1}
           aria-label="First Page"
         >
           {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
@@ -76,7 +76,7 @@ class TablePaginationActions extends React.Component {
           aria-label="Last Page"
         >
           {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-        </IconButton> */}
+        </IconButton>
       </div>
     );
   }
@@ -88,7 +88,7 @@ TablePaginationActions.propTypes = {
   onChangePage: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
-  theme: PropTypes.object.isRequired,
+  // theme: PropTypes.object.isRequired,
 };
 
 const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: true })(
@@ -96,10 +96,6 @@ const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: tru
 );
 
 let counter = 0;
-function createData(name, calories, fat) {
-  counter += 1;
-  return { id: counter, name, calories, fat };
-}
 
 const styles = theme => ({
   root: {
@@ -124,7 +120,7 @@ class CustomPaginationActionsTable extends React.Component {
     };
   }
 
-  handleChangePage = (event, page) => {
+  handleChangePage = () => (event, page) => {
     this.setState({ page });
   };
 
@@ -143,20 +139,27 @@ class CustomPaginationActionsTable extends React.Component {
           <Table className={classes.table}>
             <TableHead>
                 <TableRow>
-                    <TableCell>Hash</TableCell>
+                    {/* <TableCell className='ellipsis' style={{maxWidth: 150}}>Hash</TableCell> */}
                     <TableCell numeric>Number</TableCell>
                     <TableCell numeric>Size</TableCell>
+                    <TableCell numeric>end Time</TableCell>
+                    <TableCell numeric>交易量</TableCell>
+                    <TableCell numeric>矿工</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
               {data.map(n => {
+                let tm = moment(n.timestamp * 1000).format('YYYY-MM-DD HH:mm')
                 return (
                   <TableRow key={n.hash}>
-                    <TableCell component="th" scope="row">
+                    {/* <TableCell component="th" scope="row">
                       <Link to={`/detail/${n.hash}`}>{n.hash}</Link>
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell numeric>{n.number}</TableCell>
                     <TableCell numeric>{n.size}</TableCell>
+                    <TableCell numeric>{tm}</TableCell>
+                    <TableCell numeric>{n.size}</TableCell>
+                    <TableCell numeric>{n.miner}</TableCell>
                   </TableRow>
                 );
               })}
@@ -166,19 +169,19 @@ class CustomPaginationActionsTable extends React.Component {
                 </TableRow>
               )}
             </TableBody>
-            {/* <TableFooter>
+            <TableFooter>
               <TableRow>
                 <TablePagination
-                  colSpan={3}
-                  count={data.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
+                  colSpan={6}
+                  count={this.props.totalCount || 0}
+                  rowsPerPage={10}
+                  page={this.props.currentPage || 1}
                   onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
+                  // onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  // ActionsComponent={TablePaginationActionsWrapped}
                 />
               </TableRow>
-            </TableFooter> */}
+            </TableFooter>
           </Table>
         </div>
       </Paper>

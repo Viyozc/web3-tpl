@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import {Input, Button,  Paper, Grid} from '@material-ui/core'
 import TableList from './TableList'
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import Web3 from 'web3'
 import {connect} from 'react-redux'
 import {getData} from '../../utils'
@@ -9,7 +10,7 @@ import './index.css';
 
 class App extends Component {
   state = {
-
+    currentPage: 1
   }
   async componentDidMount () {
     // const testUrl = 'https://rinkeby.infura.io/1JxnanpAnDAITgF9oHh1' 
@@ -31,6 +32,7 @@ class App extends Component {
     web3.eth.getBlockNumber((err, res) => {
       console.log('block', res) // 11598
       this._latest = res
+      this.setState({totalCount: res})
       let data = new Array(10).fill(1).map((v, i) => {
         return web3.eth.getBlock(this._latest - i)
       })
@@ -45,15 +47,6 @@ class App extends Component {
     var addr = "0xeeca6f52e6728f03bb2b2b826e81d4cfbe9a2c9a9dd6b4207acaffb3947ff1ed"
     var number = web3.eth.getBlockTransactionCount(addr);
     console.log(number); // 1
-    // var filter = web3.eth.filter({fromBlock:0, toBlock:'latest', address: addr});
-    // filter.get(function (err, transactions) {
-    //   transactions.forEach(function (tx) {
-    //     var txInfo = web3.eth.getTransaction(tx.transactionHash);
-    //     //这时可以将交易信息txInfo存入数据库
-    //     console.log(111, txInfo)
-    //   });
-    // });
-
 
     let balance = web3.eth.getBalance('0xcdc0f25c6c99800604fa7fa5194a55f20a9dc7ee')
 
@@ -67,27 +60,27 @@ class App extends Component {
     }
   }
   render() {
-    debugger
     return (
       <div className="App">
         <header className="App-header">
           列表
         </header>
         <div style={{margin: '0 10px'}}>
-          <Grid container spacing={16}>
-          <Grid item  sm={12} xs={12}>
-            <Paper>
-              <TableList 
-                data={this.state.data}
-                total={this._latest}
-                currentPage={this.props.location.search}
-              />
-            </Paper>
-          </Grid>
-          </Grid>
+              <Paper>
+                <TableList 
+                  data={this.state.data}
+                  totalCount={this.state.totalCount}
+                  currentPage={this.state.currentPage}
+                  onPageChange={this.onPageChange.bind(this)}
+                />
+              </Paper>
         </div>
+        <Footer />
       </div>
     );
+  }
+  onPageChange = (v) => {
+    this.setState({currentPage: v})
   }
   _search = async () => {
     let a = await getData('/', {
@@ -102,3 +95,9 @@ class App extends Component {
 }
 
 export default App;
+
+const Footer = () => {
+  return (
+      <footer className='footer'>Footer</footer>
+  )
+}
