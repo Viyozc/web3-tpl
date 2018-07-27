@@ -6,11 +6,14 @@ import {
 } from 'react-router-dom';
 
 import Index from '../containers/home'
+import BlockList from '../containers/blockList'
 import Detail from '../containers/detail'
 import createHistory from 'history/createBrowserHistory';
 
 const history = createHistory();
-
+history.listen((v) => {
+    history.location.query = history.location.search
+})
 
 class App extends React.Component {
     constructor(props, context) {
@@ -20,7 +23,8 @@ class App extends React.Component {
         return (
             <Router  history={history}>
                 <Switch>
-                    <Route path="/" component={Index}/>
+                    <Route exact path="/" component={Index}/>
+                    <Route exact path="/blockList" component={BlockList}/>
                     <Route exact path="/detail/:id" component={Detail}/>
                 </Switch>
             </Router>

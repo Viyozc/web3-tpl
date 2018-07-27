@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import {Input, Button,  Paper, Grid} from '@material-ui/core'
-import TableComp from './Table'
+import TableList from './TableList'
 import Web3 from 'web3'
 import {connect} from 'react-redux'
 import {getData} from '../../utils'
@@ -67,31 +67,24 @@ class App extends Component {
     }
   }
   render() {
+    debugger
     return (
       <div className="App">
         <header className="App-header">
+          列表
         </header>
-        <div>        
-          <Input style={{width: 600, height: 50}} />
-          <Button color="primary" onClick={this._search} >
-            查徇
-          </Button>
-        </div>
-        <div>
-          <Grid container spacing={16} >
-          <Grid item sm={1} xs={false}/>
+        <div style={{margin: '0 10px'}}>
+          <Grid container spacing={16}>
           <Grid item  sm={12} xs={12}>
-            <Paper><TableComp data={this.state.data}/></Paper>
+            <Paper>
+              <TableList 
+                data={this.state.data}
+                total={this._latest}
+                currentPage={this.props.location.search}
+              />
+            </Paper>
           </Grid>
-          <Grid item sm={12} xs={12}>
-            <Paper><TableComp data={[]}/></Paper>
           </Grid>
-          </Grid>
-        </div>
-        <div>
-          {/* <Button color="primary" >
-            <Link to='/detail/1'>详情</Link>
-          </Button> */}
         </div>
       </div>
     );
